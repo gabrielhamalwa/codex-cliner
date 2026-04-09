@@ -22,6 +22,7 @@ jobs:
         permissions:
             contents: read
             id-token: write
+            packages: write
         steps:
             - name: Checkout
               uses: actions/checkout@v5
@@ -79,7 +80,8 @@ jobs:
                     echo "## Release checklist"
                     echo "- package.json version: ${{ steps.package.outputs.version }}"
                     echo "- validation suite: passed"
-                    echo "- npm token configured: required for publish step"
+                    echo "- npmjs publish target: codex-cliner"
+                    echo "- GitHub Packages target: @${GITHUB_REPOSITORY_OWNER,,}/codex-cliner"
                     echo "- tag/version alignment: checked on tag-triggered runs"
                     echo "- dry run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}"
                   } >> "$GITHUB_STEP_SUMMARY"
@@ -89,3 +91,38 @@ jobs:
               run: npm publish --provenance --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+            - name: Prepare the GitHub Packages artefact
+              if: github.event_name == 'push' || inputs.dry_run == false
+              run: |
+                  rm -rf .release/github-package
+                  mkdir -p .release/github-package
+                  cp -R dist .release/github-package/dist
+                  cp README.md LICENSE .release/github-package/
+                  cp package.json .release/github-package/package.json
+                  OWNER_LOWER="${GITHUB_REPOSITORY_OWNER,,}"
+                  node -e '
+                  const fs = require("node:fs");
+                  const path = ".release/github-package/package.json";
+                  const pkg = JSON.parse(fs.readFileSync(path, "utf8"));
+                  pkg.name = `@${process.env.OWNER_LOWER}/${pkg.name}`;
+                  pkg.publishConfig = { registry: "https://npm.pkg.github.com" };
+                  fs.writeFileSync(path, `${JSON.stringify(pkg, null, 4)}\n`);
+                  '
+              env:
+                  OWNER_LOWER: ${{ github.repository_owner }}
+
+            - name: Setup Node for GitHub Packages
+              if: github.event_name == 'push' || inputs.dry_run == false
+              uses: actions/setup-node@v5
+              with:
+                  node-version: 20
+                  registry-url: https://npm.pkg.github.com
+                  scope: '@gabrielhamalwa'
+
+            - name: Publish to GitHub Packages
+              if: github.event_name == 'push' || inputs.dry_run == false
+              run: npm publish
+              working-directory: .release/github-package
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
