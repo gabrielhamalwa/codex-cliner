@@ -1,6 +1,6 @@
 {
     "name": "codex-cliner",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Backup-first local Codex cleanup and recovery manager.",
     "license": "MIT",
     "repository": {
