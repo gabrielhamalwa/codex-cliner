@@ -3,6 +3,14 @@
     "version": "0.1.0",
     "description": "Backup-first local Codex cleanup and recovery manager.",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/gabrielhamalwa/codex-cliner.git"
+    },
+    "homepage": "https://github.com/gabrielhamalwa/codex-cliner#readme",
+    "bugs": {
+        "url": "https://github.com/gabrielhamalwa/codex-cliner/issues"
+    },
     "type": "module",
     "packageManager": "bun@1.3.11",
     "bin": {
