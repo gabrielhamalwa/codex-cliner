@@ -1,0 +1,62 @@
+name: Security
+
+on:
+    push:
+        branches:
+            - main
+            - 'codex/**'
+    pull_request:
+    schedule:
+        - cron: '17 4 * * 1'
+
+permissions:
+    contents: read
+    security-events: write
+
+jobs:
+    codeql:
+        name: CodeQL
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Initialize CodeQL
+              uses: github/codeql-action/init@v3
+              with:
+                  languages: javascript-typescript
+
+            - name: Autobuild
+              uses: github/codeql-action/autobuild@v3
+
+            - name: Perform CodeQL analysis
+              uses: github/codeql-action/analyze@v3
+
+    dependency-review:
+        name: Dependency review
+        if: github.event_name == 'pull_request'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Dependency review
+              uses: actions/dependency-review-action@v4
+
+    app-security-check:
+        name: App security check
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Bun
+              uses: oven-sh/setup-bun@v2
+              with:
+                  bun-version: 1.3.11
+
+            - name: Install dependencies
+              run: bun install --frozen-lockfile
+
+            - name: Run repository security check
+              run: bun run security:check
