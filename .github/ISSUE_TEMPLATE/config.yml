@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+    - name: Before opening an issue
+      url: mailto:gdhdev@protonmail.com
+      about: If you are unsure whether something is a bug, feature request, support question, or private report, contact the maintainer first.
+    - name: Security issue or exploit report
+      url: mailto:gdhdev@protonmail.com
+      about: Report vulnerabilities privately. Do not open public issues with exploit details or data-loss reproduction steps.
+    - name: General support or maintainer contact
+      url: mailto:gdhdev@protonmail.com
+      about: Contact the maintainer directly for private follow-up or questions that do not belong in public issues.
