@@ -1,0 +1,79 @@
+name: Feature request
+description: Propose a focused improvement to codex-cliner.
+title: '[Feature]: '
+labels:
+    - enhancement
+    - triage
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Thanks for the suggestion.
+
+              Good feature requests are specific about the user problem, the desired workflow, and the safety implications for local Codex data.
+    - type: input
+      id: contact
+      attributes:
+          label: Contact details
+          description: Optional, if you want follow-up questions sent directly.
+          placeholder: name@example.com
+      validations:
+          required: false
+    - type: dropdown
+      id: area
+      attributes:
+          label: Area
+          options:
+              - Interactive UI
+              - Session management
+              - Archived session cleanup
+              - Backup and restore
+              - Config and detection
+              - Worktree support
+              - Documentation
+              - Release and packaging
+              - Other
+      validations:
+          required: true
+    - type: textarea
+      id: problem
+      attributes:
+          label: Problem to solve
+          description: What is hard, missing, or error-prone today?
+          placeholder: Describe the user problem before describing the solution.
+      validations:
+          required: true
+    - type: textarea
+      id: proposal
+      attributes:
+          label: Proposed solution
+          description: Describe the change you want and how it should behave.
+          placeholder: Explain the desired command, UI flow, or storage behavior.
+      validations:
+          required: true
+    - type: textarea
+      id: alternatives
+      attributes:
+          label: Alternatives considered
+          description: Other approaches, workarounds, or why the current behavior is insufficient.
+      validations:
+          required: false
+    - type: textarea
+      id: safety
+      attributes:
+          label: Storage and safety considerations
+          description: Note any implications for backups, restore, destructive actions, or Codex-owned paths.
+          placeholder: Explain whether this change would touch local data, backups, restore, or confirmation flows.
+      validations:
+          required: false
+    - type: checkboxes
+      id: checks
+      attributes:
+          label: Confirmation
+          options:
+              - label: I checked for existing issues or roadmap items covering this request.
+                required: true
+              - label: I understand that codex-cliner should not store app-owned data inside Codex directories.
+                required: true
+              - label: I agree to follow this project's Code of Conduct.
+                required: true
