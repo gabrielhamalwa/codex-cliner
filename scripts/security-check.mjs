@@ -9,6 +9,7 @@ const allowlist = new Set([
     'src/utils/fs.ts',
     'src/backups/manager.test.ts',
     'src/cli.test.ts',
+    'src/config/store.test.ts',
     'scripts/security-check.mjs',
 ]);
 
