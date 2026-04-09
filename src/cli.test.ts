@@ -87,7 +87,12 @@ describe('cli', () => {
     it('shows the saved config and can reset it', async () => {
         const configRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'codex-cliner-cli-config-'));
         const homeRoot = path.join(configRoot, 'home');
-        const configDir = path.join(homeRoot, 'Library', 'Application Support', 'codex-cliner');
+        const configDir =
+            process.platform === 'darwin'
+                ? path.join(homeRoot, 'Library', 'Application Support', 'codex-cliner')
+                : process.platform === 'win32'
+                  ? path.join(homeRoot, 'AppData', 'Roaming', 'codex-cliner')
+                  : path.join(homeRoot, '.local', 'share', 'codex-cliner');
         const { stdout: resetStdout } = await runCli(['config', 'reset'], { HOME: homeRoot });
 
         expect(resetStdout).toContain('Saved codex-cliner configuration cleared.');
